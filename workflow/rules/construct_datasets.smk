@@ -95,18 +95,16 @@ rule download_genomes:
 	input:
 		genomes_accessions = rules.process_uniprot.output.genomes_accessions
 	output:
-		genomes_gb = "results/interaction_datasets/05_interaction_datasets/genomes.gb"
+		genomes_gb = "results/interaction_datasets/05_genomes/genomes.gb"
 	log:
 		"results/logs/construct_datasets/download_genomes.log"
-	params:
-		email = config.get('email')
 	conda:
 		"../envs/pvogs.yml"
 	shell:
 		"python workflow/scripts/download_genomes.py "
 		"-i {input.genomes_accessions} "
 		"-o {output.genomes_gb} "
-		"-e {params.email} &>{log}"
+		"&>{log}"
 
 rule extract_proteins_from_genomes:
 	input:
