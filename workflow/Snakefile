@@ -1,0 +1,102 @@
+configfile: "config/config.yaml"
+
+# This defines the number of negatives
+NEGATIVES = config["negatives"]
+
+# This defines the names of the negatives
+DATASETS = ['N{}'.format(i+1) for i in range(0,NEGATIVES)]
+# Append the 'positives'. Now a rule can expand on all datasets
+DATASETS.append('positives')
+
+
+include: "rules/get_data.smk"
+include: "rules/pre_process.smk"
+include: "rules/construct_datasets.smk"
+
+
+rule all:
+	input:
+		# Raw data required
+		# Produced by get_data.smk
+		"data/genomes/phages_refseq.fasta",
+		"data/interactions/intact.txt",
+		"data/pvogs/all.hmm",
+		"data/pvogs/VOGProteinTable.txt",
+		"data/taxonomy_db/taxa.sqlite",
+		"data/taxonomy_db/taxa.sqlite.traverse.pkl",
+
+		# Pre-processing for calculating matrices
+		# Produced by pre_process.smk
+		"results/scores.tsv",
+		"results/filtered_scores.tsv",
+		"results/annotations.tsv",
+
+		 # Getting to pvogs from proteins and calcualating features
+		 # Produced by pre_process.smk
+		 expand(["results/interaction_datasets/{dataset}/{dataset}.interactions.tsv",
+				"results/interaction_datasets/{dataset}/{dataset}.proteins.faa",
+				"results/interaction_datasets/{dataset}/{dataset}.pvogs_interactions.tsv",
+				"results/interaction_datasets/{dataset}/{dataset}.features.tsv"],
+				dataset=DATASETS),
+
+		 # Major results
+		 # Produced by this file.
+		 "results/RF/best_model.pkl",
+		 "results/RF/best_model_id.txt",
+		 "results/predictions.tsv",
+		 "results/final_training_set.tsv"
+
+
+
+checkpoint random_forest:
+	input:
+		expand("results/interaction_datasets/{dataset}/{dataset}.features.tsv", dataset=DATASETS),
+		filtered_master_tsv = rules.filter_scores_table.output.filtered_master_tsv
+	output:
+		best_model = "results/RF/best_model.pkl",
+		best_model_id = "results/RF/best_model_id.txt" # This only contains the name as a string...
+	log:
+		"results/logs/processed_notebook.py.ipynb"
+	conda:
+		"envs/pvogs_jupy.yml"
+	threads: 16
+	notebook:
+		"notebooks/data_processing.py.ipynb"
+
+
+def get_best_model_id(wildcards):
+	"""
+	Helper function to get the id of the dataset that gave the
+	best results from the notebook search.
+	"""
+	checkpoint_output = checkpoints.random_forest.get(**wildcards).output[1]
+	with open(checkpoint_output, 'r') as fin:
+		best_model_id = fin.read().strip()
+	return best_model_id
+
+rule predict:
+	input:
+		positives_features_tsv = "results/interaction_datasets/positives/positives.features.tsv",
+		model_fp = "results/RF/best_model.pkl",
+		filtered_scores_tsv = rules.filter_scores_table.output.filtered_master_tsv
+	output:
+		predictions_tsv = "results/predictions.tsv",
+		final_training_set_tsv = "results/final_training_set.tsv"
+	log:
+		"results/logs/predict.log"
+	conda:
+		"envs/pvogs_jupy.yml"
+	params:
+		# This is read from the notebook output
+		dataset_string = get_best_model_id,
+	threads: 16
+	shell:
+		"python workflow/scripts/predict.py "
+		"-j {threads} "
+		"-m {input.model_fp} "
+		"-p {input.positives_features_tsv} "
+		"-n results/interaction_datasets/{params.dataset_string}/{params.dataset_string}.features.tsv "
+		"-t {input.filtered_scores_tsv} "
+		"-o {output.predictions_tsv} "
+		"&>{log}"
+
