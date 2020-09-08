@@ -2,4 +2,4 @@ data/*
 .snakemake/*
 results/*
 
-*.ipynb_checkpoints/*
+workflow/notebooks/.ipynb_checkpoints/*
