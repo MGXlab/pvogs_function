@@ -1,7 +1,10 @@
-email: 'n.pappas@uu.nl'
-
+# Specify the number of negative datasets to be created
 negatives: 10
 
+# Zenodo specific 
+# TO DO
+# This should be moved to the stable zenodo doi
+# and remove use_sandbox when publishing
 zenodo:
   doi: 666718
   use_sandbox: True
