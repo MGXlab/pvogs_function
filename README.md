@@ -145,7 +145,6 @@ results
 │   ├── 03_uniprot
 │   ├── 04_process_uniprot
 │   ├── 05_genomes
-│   ├── 05_interaction_datasets
 │   ├── 06_map_proteins_to_pvogs
 │   ├── N1  --------------------------------  
 ....                                        | * Features, interactions, proteins, and pvogs are stored per dataset
