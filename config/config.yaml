@@ -1,0 +1,8 @@
+email: 'n.pappas@uu.nl'
+
+negatives: 10
+
+zenodo:
+  doi: 666718
+  use_sandbox: True
+
