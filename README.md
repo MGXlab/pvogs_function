@@ -1,8 +1,8 @@
 # PVOGs functions interactions
----
+
 
 ## TL;DR
----
+
 
 ```
 # Clone this repo
@@ -21,7 +21,6 @@ $ conda activate my_env
 ```
 
 ## Description
----
 The main purpose of this repository is to host the code necessary for full reproducibility.
 
 * Raw data required are hosted on [zenodo sandbox](https://sandbox.zenodo.org/record/666719#.X1c5qoZS_J8). These are automatically
@@ -30,7 +29,6 @@ downloaded when executing the workflow, so no need to get them.
 Most of the steps are not easily configurable, unless you take a dive into all the rules and scripts. This is by choice.
 
 ## Requirements
----
 
 * A working [conda](https://docs.conda.io/en/latest/) installation
 * `snakemake >= 5.14` (any version with jupyter integration should do)
@@ -49,62 +47,53 @@ $ conda activate my_env
 ```
 
 ## Configuration
----
 
-There is not any real configuration needed. The `config/config_default.yml` file is there mainly as a placeholder for things that are
-subject to change. These are mainly
-  - the zenodo dois: Until the workflow gets published, I am using the zenodo sandbox for testing.
+The configuration options are included in the `config/config.yml`.
+These include:
+- `negatives`: Specifies the number of negative datasets to create. 10 is used in the manuscript.
+  >Changing this will most likely break the workflow
 
-The only value that will make a difference is the `negatives`. This determines how many negative datasets to create.
-For reproducibility, leave that to `10`. You can mess around with different values but 
-be advised: **this has not been tested, and the workflow will most likely break**.
+- the zenodo dois Until the workflow gets published, I am using the zenodo sandbox for testing.
+- `threads` per rule
+  For the most resource demanding rules included in the config, you can specify the number of cores
+  each rule will utilize at runtime. I have set these to reasonable values for my own local
+  setup (`Ubuntu 16.04.1 x86_64` with `120Gb` of RAM and `20` processors) for a good
+  parallelization/runtime balance. **You should adjust these according to your own local
+  setup.**
 
 ## Usage
 ---
-Currently, this workflow was built and tested on a local machine with graphics enabled.
+Currently, this workflow was built and tested on a local machine with an X server available 
+(i.e. you can do stuff in a GUI).
 
->If you run this on a remote machine, make sure that you (can) ssh with `ssh -X ...`
+>If you run this on a remote machine, make sure that you (can) ssh with `ssh -X ...`.
 >This is required for the `summarize_intact.py` script, that uses the `ete3` package
 >to do some plotting.
 
-The most resource demanding rules are 
-* ANI calculation: `fastani`
-* AAI calculation: `comparem_call_genes`, `comparem_similarity`, `comparem_aai`
-* HMM searches: `hmmsearch`, `hmmsearch_transeq`
-* Model search: `random_forest`
-
-
-`threads` have been manually set to allow these to run in a reasonable amount of time and allow parallel execution of jobs,
-given my own local setup (`Ubuntu 16.04.1 x86_64` with 120Gb of RAM and 20 processors). You should adjust these according to your needs.
-
->TO DO
->Include thread definition in the config
-
-
 ### **Option 1. This repo**
----
+
 `cd` into the root directory of this repo.
 
-  - Dry run:
+- Dry run:
 Always a good idea before launching the whole worfklow
 ```
 $ snakemake --use-conda -j16 -np
 ```
 
-If the dry run completed with no errors to run the worfklow by removing the `-n` flag. 
-  * Adjust number of parallel jobs (`-j`) according to your setup
-  * Remove the `-p` flag if you don't want the commands to be printed.
+If the dry run completed with no errors you can execute the worfklow by removing the `-n` flag. 
+* Adjust the number of parallel jobs (`-j`) according to your setup
+* Remove the `-p` flag if you don't want the commands to be printed.
 ```
 $ snakemake --use-conda -j16 -p
 ```
-  - Speed up environment creation with mamba
+- Speed up environment creation with mamba
 If `mamba` is available in your snakemake environment, or if you created a new environment with the `environment.yml`
 provided here:
 ```
 $ snakemake --use-conda -j16 --conda-frontend mamba
 ```
 
-  - Jupyter integration
+- Jupyter integration
 A central notebook is used for all visualization and machine learning (model search) purposes.
 Its main output is the `results/RF/best_model.pkl` file.
 
@@ -114,23 +103,24 @@ $ snakemake --use-conda -j16 --conda-frontend mamba --edit-notebook results/RF/b
 ```
 Once the `results/RF/best_model.pkl` is written you can save the changes, and quit the server
 ([more info here](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#jupyter-notebook-integration) and
-you can always [see this demo](https://snakemake.readthedocs.io/en/stable/_images/snakemake-notebook-demo.gif).
+you can always [see this demo](https://snakemake.readthedocs.io/en/stable/_images/snakemake-notebook-demo.gif)).
 This will trigger the execution of the rest of the workflow.
 
 The resulting notebook will be saved as `results/logs/processed_notebook.py.ipynb`.
 
-Note that depending on the changes you make the results you might get will differ from the default, non-interactive run.
+**Note that depending on the changes you make, the results you might get will differ from the default, non-interactive run**.
 
 
-### **Option 2.** Archived workflow from zenodo (TO DO).
----
+### Option 2. Archived workflow from zenodo (TO DO).
+
 Something along the [guidelines from snakemake](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html#sustainable-and-reproducible-archiving).
 
 
 ## Output
----
-The output of the whole workflow is produced and stored within a `results` directory. This looks like (several directories
-and files omitted for legibility). Most prominent ones are marked with an asterisk and a short description:
+
+The output of the whole workflow is produced and stored within a `results` directory. This looks like below.
+(several directories and files have been omitted)
+Th most prominent ones are marked with a short description:
 ```
 # Skipping several thousands of intermediate files with the -I option
 $ tree -n -I '*NC*.fasta|*_genes.*|*.gff|*.log' results
@@ -183,3 +173,4 @@ results
 └── scores.tsv  ----------------------------- * Master table with feature values for all possible pVOGs combinations
 
 ```
+
