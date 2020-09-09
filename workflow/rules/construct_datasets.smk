@@ -182,7 +182,8 @@ rule hmmsearch:
 		hmm_tblout_tsv = "results/interaction_datasets/06_map_proteins_to_pvogs/{dataset}/{dataset}.hmmtblout.tsv" 
 	log:
 		"results/logs/construct_datasets/{dataset}/hmmsearch.log"
-	threads: 8
+	threads: 
+		config['hmmsearch'].get('threads', 8)
 	conda:
 		"../envs/pvogs.yml"
 	shell:

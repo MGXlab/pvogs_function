@@ -9,3 +9,50 @@ zenodo:
   doi: 666718
   use_sandbox: True
 
+# Core usage for heavy jobs
+# These are defined per rule
+# Accessible inside the workflow with
+# config[`rule_name`]['trheads']
+#    or config[`rule_name`].get('threads', some_default)
+
+## pre_process.smk
+# hmmsearch_transeq: hmmsearch of all pvogs against the
+#   translated genomes
+hmmsearch_transeq:
+  # Defaults to 10
+  threads: 16
+
+
+# fastani: Computes ANI across all input genomes
+fastani:
+  # Defaults to 10
+  threads: 16
+
+# comparem_call_genes: Calls genes with prodigal on all input genomes
+comparem_call_genes:
+  # Defaults to 10
+  threads: 12
+
+# comparem_similarity: computes similarity across genomes based on the predicted genes
+comparem_similarity:
+  # Defaults to 10
+  threads: 12
+
+# comparem_aai: computes AAI across genomes based on similarity
+comparem_aai:
+  # Defaults to 10
+  threads: 12
+
+## construct_datasets.smk
+# hmmsearch : search pvogs against each dataset
+hmmsearch:
+  # Defaults to 8
+  threads: 6
+
+## Snakefile
+# random_forest: used in sklearn.RandomizedSearchCV in the notebook
+random_forest:
+  # Defaults to 16
+  threads: 14
+
+

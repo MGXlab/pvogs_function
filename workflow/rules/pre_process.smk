@@ -26,7 +26,8 @@ rule hmmsearch_transeq:
 		"results/logs/pre_process/hmmsearch/hmmsearch_transeq.log"
 	conda:
 		"../envs/pvogs.yml"
-	threads: 10
+	threads:
+		config['hmmsearch_transeq'].get('threads', 10)
 	shell:
 		"hmmsearch --cpu {threads} "
 		"-o {output.hmmout_txt} "
@@ -66,7 +67,8 @@ rule fastani:
 		"results/logs/pre_process/fastani/fastani.log"
 	conda:
 		"../envs/pvogs.yml"
-	threads: 8
+	threads: 
+		config['fastani'].get('threads', 8)
 	params:
 		fragLen = 300,
 		minFraction = 0.1
@@ -110,7 +112,8 @@ rule comparem_call_genes:
 	params:
 		genes_dir = "results/pre_process/comparem/aai_wf/genes",
 		genomes_dir = "results/pre_process/all_genomes"
-	threads: 10
+	threads:
+		config['comparem_call_genes'].get('threads', 10)
 	shell:
 		"comparem call_genes -c {threads} --silent -x fasta "
 		"{params.genomes_dir} "
@@ -143,7 +146,8 @@ rule comparem_similarity:
 	log:
 		# Produced by comparem by default
 		"results/pre_process/comparem/aai_wf/similarity/comparem.log"
-	threads: 10
+	threads:
+		config['comparem_similarity'].get('threads', 10)
 	conda:
 		"../envs/pvogs.yml"
 	shell:
@@ -166,8 +170,11 @@ rule comparem_aai:
 		"results/pre_process/comparem/aai_wf/aai/comparem.log"
 	params:
 		aai_dir = "results/pre_process/comparem/aai_wf/aai"
+	threads:
+		config['comparem_aai'].get('threads', 10)
 	shell:
 		"comparem aai --silent "
+		"-c {threads} "
 		"{input.query_genes_faa} {input.hits_sorted_tsv} "
 		"{params.aai_dir}"
 

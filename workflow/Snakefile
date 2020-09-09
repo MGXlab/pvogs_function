@@ -59,7 +59,8 @@ checkpoint random_forest:
 		"results/logs/processed_notebook.py.ipynb"
 	conda:
 		"envs/pvogs_jupy.yml"
-	threads: 16
+	threads:
+		config['random_forest'].get('threads', 16)
 	notebook:
 		"notebooks/data_processing.py.ipynb"
 
