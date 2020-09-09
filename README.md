@@ -11,7 +11,7 @@ $ git clone https://git.science.uu.nl/n.pappas/pvogs_function.git
 # Get in there
 $ cd pvogs_function
 
-# Optional, if snakemake>=5.14 and conda available
+# Recommended: Create the same environment with conda
 $ conda env create -n my_env --file=environment.yml
 $ conda activate my_env
 
