@@ -6,7 +6,7 @@
 
 ```
 # Clone this repo
-$ git clone this_repo pvogs_function
+$ git clone https://git.science.uu.nl/n.pappas/pvogs_function.git
 
 # Get in there
 $ cd pvogs_function
@@ -74,7 +74,8 @@ Currently, this workflow was built and tested on a local machine with an X serve
 
 `cd` into the root directory of this repo.
 
-- Dry run:
+- Dry run
+
 Always a good idea before launching the whole worfklow
 ```
 $ snakemake --use-conda -j16 -np
@@ -87,6 +88,7 @@ If the dry run completed with no errors you can execute the worfklow by removing
 $ snakemake --use-conda -j16 -p
 ```
 - Speed up environment creation with mamba
+
 If `mamba` is available in your snakemake environment, or if you created a new environment with the `environment.yml`
 provided here:
 ```
@@ -94,6 +96,7 @@ $ snakemake --use-conda -j16 --conda-frontend mamba
 ```
 
 - Jupyter integration
+
 A central notebook is used for all visualization and machine learning (model search) purposes.
 Its main output is the `results/RF/best_model.pkl` file.
 
@@ -118,9 +121,10 @@ Something along the [guidelines from snakemake](https://snakemake.readthedocs.io
 
 ## Output
 
-The output of the whole workflow is produced and stored within a `results` directory. This looks like below.
+The output of the whole workflow is produced and stored within a `results` directory. 
+This has the structure shown below.
 (several directories and files have been omitted)
-Th most prominent ones are marked with a short description:
+The most prominent ones are marked with a short description:
 ```
 # Skipping several thousands of intermediate files with the -I option
 $ tree -n -I '*NC*.fasta|*_genes.*|*.gff|*.log' results
