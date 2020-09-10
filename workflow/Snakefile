@@ -44,7 +44,8 @@ rule all:
 		 "results/RF/best_model.pkl",
 		 "results/RF/best_model_id.txt",
 		 "results/predictions.tsv",
-		 "results/final_training_set.tsv"
+		 "results/final_training_set.tsv",
+		 "results/predictions_annotations_features.tsv"
 
 
 
@@ -99,5 +100,22 @@ rule predict:
 		"-n results/interaction_datasets/{params.dataset_string}/{params.dataset_string}.features.tsv "
 		"-t {input.filtered_scores_tsv} "
 		"-o {output.predictions_tsv} "
+		"&>{log}"
+
+rule join_annotations_predictions:
+	input:
+		annotations_tsv = rules.parse_annotations.output.processed_annotations_fp,
+		predictions_tsv = rules.predict.output.predictions_tsv
+	output:
+		final_table_tsv = "results/predictions_annotations_features.tsv"
+	log:
+		"results/logs/join_annotations_predictions.log"
+	conda:
+		"envs/pvogs.yml"
+	shell:
+		"python workflow/scripts/join_annotations_predictions.py "
+		"-i {input.predictions_tsv} "
+		"-a {input.annotations_tsv} "
+		"-o {output.final_table_tsv} "
 		"&>{log}"
 
