@@ -1,0 +1,3 @@
+*.smk gitlab-language=python
+Snakefile gitlab-language=python
+
