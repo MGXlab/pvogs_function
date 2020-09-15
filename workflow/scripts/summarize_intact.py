@@ -1,7 +1,13 @@
 #!/usr/bin/env python
 
 import argparse
+
+# This is to handle ete3 plotting with Qt in a headless environment
+import os
+os.environ['QT_QPA_PLATFORM'] = 'offscreen'
 from ete3 import NCBITaxa, TextFace, TreeStyle, faces
+
+
 from collections import namedtuple
 import pandas as pd
 from Bio import SwissProt
