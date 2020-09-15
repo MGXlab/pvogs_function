@@ -3,6 +3,7 @@
 import argparse
 
 # This is to handle ete3 plotting with Qt in a headless environment
+# https://github.com/ContinuumIO/anaconda-issues/issues/1806#issuecomment-305972263
 import os
 os.environ['QT_QPA_PLATFORM'] = 'offscreen'
 from ete3 import NCBITaxa, TextFace, TreeStyle, faces
