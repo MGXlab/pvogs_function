@@ -3,7 +3,6 @@
 
 ## TL;DR
 
-
 ```
 # Clone this repo
 $ git clone https://git.science.uu.nl/n.pappas/pvogs_function.git
@@ -21,6 +20,7 @@ $ conda activate my_env
 ```
 
 ## Description
+
 The main purpose of this repository is to host the code necessary for full reproducibility.
 
 * Raw data required are hosted on [zenodo sandbox](https://sandbox.zenodo.org/record/666719#.X1c5qoZS_J8). These are automatically
@@ -53,8 +53,12 @@ These include:
 - `negatives`: Specifies the number of negative datasets to create. 10 is used in the manuscript.
   >Changing this will most likely break the workflow
 
-- the zenodo dois Until the workflow gets published, I am using the zenodo sandbox for testing.
+- the zenodo dois 
+
+Until the workflow gets published, I am using the zenodo sandbox for testing.
+
 - `threads` per rule
+
   For the most resource demanding rules included in the config, you can specify the number of cores
   each rule will utilize at runtime. I have set these to reasonable values for my own local
   setup (`Ubuntu 16.04.1 x86_64` with `120Gb` of RAM and `20` processors) for a good
@@ -62,13 +66,10 @@ These include:
   setup.**
 
 ## Usage
----
-Currently, this workflow was built and tested on a local machine with an X server available 
-(i.e. you can do stuff in a GUI).
 
->If you run this on a remote machine, make sure that you (can) ssh with `ssh -X ...`.
->This is required for the `summarize_intact.py` script, that uses the `ete3` package
->to do some plotting.
+Currently, this workflow was built and tested on a local machine. 
+It should be fairly easy to use a cluster profile, but this has not been tested here.
+A couple of options are provided:
 
 ### **Option 1. This repo**
 
@@ -111,7 +112,7 @@ This will trigger the execution of the rest of the workflow.
 
 The resulting notebook will be saved as `results/logs/processed_notebook.py.ipynb`.
 
-**Note that depending on the changes you make, the results you might get will differ from the default, non-interactive run**.
+**Note that depending on the changes you make, the results you get will differ from the default, non-interactive run**.
 
 
 ### Option 2. Archived workflow from zenodo (TO DO).
@@ -174,7 +175,7 @@ results
 │       ├── N10.RF.pkl ---------------------- * Best model obtained when optimizing with each negative set
         .....
 .....		
-└── scores.tsv  ----------------------------- * Master table with feature values for all possible pVOGs combinations
-
+│── scores.tsv  ----------------------------- * Table with feature values for all possible pVOGs combinations
+│── predictions_annotations_features.tsv ---- * Master table that contains all results.
 ```
 
