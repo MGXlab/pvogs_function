@@ -57,7 +57,7 @@ checkpoint random_forest:
 		best_model = "results/RF/best_model.pkl",
 		best_model_id = "results/RF/best_model_id.txt" # This only contains the name as a string...
 	log:
-		"results/logs/processed_notebook.py.ipynb"
+		"results/.logs/processed_notebook.py.ipynb"
 	conda:
 		"envs/pvogs_jupy.yml"
 	threads:
@@ -85,7 +85,7 @@ rule predict:
 		predictions_tsv = "results/predictions.tsv",
 		final_training_set_tsv = "results/final_training_set.tsv"
 	log:
-		"results/logs/predict.log"
+		"results/.logs/predict.log"
 	conda:
 		"envs/pvogs_jupy.yml"
 	params:
@@ -109,7 +109,7 @@ rule join_annotations_predictions:
 	output:
 		final_table_tsv = "results/predictions_annotations_features.tsv"
 	log:
-		"results/logs/join_annotations_predictions.log"
+		"results/.logs/join_annotations_predictions.log"
 	conda:
 		"envs/pvogs.yml"
 	shell:
