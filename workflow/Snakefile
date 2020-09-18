@@ -91,7 +91,8 @@ rule predict:
 	params:
 		# This is read from the notebook output
 		dataset_string = get_best_model_id,
-	threads: 16
+	threads:
+		config["predict"].get("threads", 16)
 	shell:
 		"python workflow/scripts/predict.py "
 		"-j {threads} "
