@@ -7,7 +7,7 @@ rule filter_intact:
 	conda:
 		"../envs/pvogs.yml"
 	log:
-		"results/logs/construct_datasets/filter_intact.log"
+		"results/.logs/construct_datasets/filter_intact.log"
 	shell:
 		"python workflow/scripts/filter_intact.py "
 		"--tax-db {input.tax_db} "
@@ -26,7 +26,7 @@ rule summarize_intact:
 	conda:
 		"../envs/pvogs.yml"
 	log:
-		"results/logs/construct_datasets/summarize_intact.log"
+		"results/.logs/construct_datasets/summarize_intact.log"
 	shell:
 		"python workflow/scripts/summarize_intact.py "
 		"--tax-db {input.tax_db} "
@@ -42,7 +42,7 @@ rule get_uniprot_ids:
 	conda:
 		"../envs/pvogs.yml"
 	log:
-		"results/logs/construct_datasets/get_uniprot_ids.log"
+		"results/.logs/construct_datasets/get_uniprot_ids.log"
 	shell:
 		"python workflow/scripts/get_uniprot_ids.py "
 		"-i {input.metadata_tsv} "
@@ -55,7 +55,7 @@ rule download_uniprots:
 	output:
 		swissprot_txt = "results/interaction_datasets/03_uniprot/uniprot.sprot.txt"
 	log:
-		"results/logs/construct_datasets/query_uniprot.log"
+		"results/.logs/construct_datasets/query_uniprot.log"
 	conda:
 		"../envs/pvogs.yml"
 	shell:
@@ -81,7 +81,7 @@ rule process_uniprot:
 	conda:
 		"../envs/pvogs.yml"
 	log:
-		"results/logs/construct_datasets/process_uniprot.log"
+		"results/.logs/construct_datasets/process_uniprot.log"
 	params:
 		output_dir = "results/interaction_datasets/04_process_uniprot"
 	shell:
@@ -97,7 +97,7 @@ rule download_genomes:
 	output:
 		genomes_gb = "results/interaction_datasets/05_genomes/genomes.gb"
 	log:
-		"results/logs/construct_datasets/download_genomes.log"
+		"results/.logs/construct_datasets/download_genomes.log"
 	conda:
 		"../envs/pvogs.yml"
 	shell:
@@ -114,7 +114,7 @@ rule extract_proteins_from_genomes:
 	conda:
 		"../envs/pvogs.yml"
 	log:
-		"results/logs/interaction_datasets/05_genomes/.extract_proteins.log"
+		"results/.logs/interaction_datasets/05_genomes/.extract_proteins.log"
 	shell:
 		"python workflow/scripts/extract_proteins_from_gb.py "
 		"-i {input.genomes_gb} "
@@ -128,7 +128,7 @@ rule copy_positives_proteins:
 	output:
 		positives_faa = "results/interaction_datasets/positives/positives.proteins.faa"
 	log:
-		"results/logs/construct_datasets/copy_positives_scores.log"
+		"results/.logs/construct_datasets/copy_positives_scores.log"
 	shell:
 		"cp {input.proteins_faa} {output.positives_faa} 2>{log}"
 
@@ -140,7 +140,7 @@ rule ncbi_positives:
 	output:
 		ncbi_positives_tsv = "results/interaction_datasets/positives/positives.interactions.tsv"
 	log:
-		"results/logs/construct_datasets/ncbi_positives.log"
+		"results/.logs/construct_datasets/ncbi_positives.log"
 	shell:
 		"cut -f3,4 {input.ncbi_interactions} > {output.ncbi_positives_tsv} 2>{log}"
 
@@ -160,7 +160,7 @@ rule make_negatives:
 	params:
 		no_negatives = NEGATIVES
 	log:
-		"results/logs/construct_datasets/make_negatives.log"
+		"results/.logs/construct_datasets/make_negatives.log"
 	shell:
 		"for i in `seq 1 {params.no_negatives}`;do "
 		"	python workflow/scripts/make_protein_combos.py "
@@ -181,7 +181,7 @@ rule hmmsearch:
 		hmm_out_txt = "results/interaction_datasets/06_map_proteins_to_pvogs/{dataset}/{dataset}.hmmout.txt",
 		hmm_tblout_tsv = "results/interaction_datasets/06_map_proteins_to_pvogs/{dataset}/{dataset}.hmmtblout.tsv" 
 	log:
-		"results/logs/construct_datasets/{dataset}/hmmsearch.log"
+		"results/.logs/construct_datasets/{dataset}/hmmsearch.log"
 	threads: 
 		config['hmmsearch'].get('threads', 8)
 	conda:
@@ -203,7 +203,7 @@ rule refseqs_to_pvogs:
 	conda:
 		"../envs/pvogs.yml"
 	log:
-		"results/logs/construct_datasets/{dataset}/refseqs_to_pvogs.log"
+		"results/.logs/construct_datasets/{dataset}/refseqs_to_pvogs.log"
 	shell:
 		"python workflow/scripts/refseqs_to_pvogs.py "
 		"-i {input.interactions_tsv} "
@@ -219,7 +219,7 @@ rule create_features_tables:
 	output:
 		features_tsv = "results/interaction_datasets/{dataset}/{dataset}.features.tsv"
 	log:
-		"results/logs/construct_datasets/{dataset}/create_features_tables.log"
+		"results/.logs/construct_datasets/{dataset}/create_features_tables.log"
 	conda:
 		"../envs/pvogs.yml"
 	shell:

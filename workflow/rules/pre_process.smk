@@ -6,7 +6,7 @@ rule translate_genomes:
 		refseq_genomes = ancient("data/genomes/phages_refseq.fasta")
 	output:
 		transeq_genomes = "results/pre_process/transeq/transeq.genomes.fasta"
-	log: "results/logs/pre_process/transeq/transeq_genomes.log"
+	log: "results/.logs/pre_process/transeq/transeq_genomes.log"
 	conda:
 		"../envs/pvogs.yml"
 	shell:
@@ -23,7 +23,7 @@ rule hmmsearch_transeq:
 		hmmout_txt = "results/pre_process/hmmsearch/transeq.hmmout.txt",
 		hmmtblout_tsv = "results/pre_process/hmmsearch/transeq.hmmtblout.tsv"
 	log:
-		"results/logs/pre_process/hmmsearch/hmmsearch_transeq.log"
+		"results/.logs/pre_process/hmmsearch/hmmsearch_transeq.log"
 	conda:
 		"../envs/pvogs.yml"
 	threads:
@@ -43,7 +43,7 @@ rule split_genomes:
 	output:
 		reflist_txt = "results/pre_process/reflist.txt"
 	log:
-		"results/logs/pre_process/split_genomes.log"
+		"results/.logs/pre_process/split_genomes.log"
 	conda:
 		"../envs/pvogs.yml"
 	params:
@@ -64,7 +64,7 @@ rule fastani:
 		fastani_raw = "results/pre_process/fastani/fastani.out",
 		fastani_matrix = "results/pre_process/fastani/fastani.out.matrix"
 	log:
-		"results/logs/pre_process/fastani/fastani.log"
+		"results/.logs/pre_process/fastani/fastani.log"
 	conda:
 		"../envs/pvogs.yml"
 	threads: 
@@ -89,7 +89,7 @@ rule fastani_matrix_to_square:
 	conda:
 		"../envs/pvogs.yml"
 	log:
-		"results/logs/pre_process/fastani_matrix_to_square.log"
+		"results/.logs/pre_process/fastani_matrix_to_square.log"
 	shell:
 		"python workflow/scripts/fastani_mat_to_square.py "
 		"-i {input.fastani_matrix} "
@@ -127,7 +127,7 @@ rule remove_empty_files:
 	params:
 		genes_dir = "results/pre_process/comparem/aai_wf/genes"
 	log:
-		"results/logs/pre_process/remove_empty_files.log"
+		"results/.logs/pre_process/remove_empty_files.log"
 	shell:
 		"python workflow/scripts/remove_empty_files.py "
 		"-i {params.genes_dir} "
@@ -186,7 +186,7 @@ rule process_comparem_matrix:
 	conda:
 		"../envs/pvogs.yml"
 	log:
-		"results/logs/pre_process/proecess_comparem_matrix.log"
+		"results/.logs/pre_process/proecess_comparem_matrix.log"
 	shell:
 		"python workflow/scripts/process_comparem.py "
 		"-i {input.aai_summary_tsv} "
@@ -203,7 +203,7 @@ rule calculate_all_scores:
 		master_table = "results/scores.tsv"
 	conda: "../envs/pvogs.yml"
 	log: 
-		"results/logs/pre_process/calculate_scores.log"
+		"results/.logs/pre_process/calculate_scores.log"
 	shell:
 		"python workflow/scripts/calculate_all_scores.py "
 		"--profiles-file {input.pvogs_all_profiles} "
@@ -219,7 +219,7 @@ rule filter_scores_table:
 	output:
 		filtered_master_tsv = "results/filtered_scores.tsv"
 	log:
-		"results/pre_process/filter_scores_table.log"
+		"results/.logs/pre_process/filter_scores_table.log"
 	shell:
 		"""awk '{{if ( $10 != "1000000") print $0}}' {input.master_table} > {output.filtered_master_tsv}"""
 
@@ -231,7 +231,7 @@ rule parse_annotations:
 	conda:
 		"../envs/pvogs.yml"
 	log:
-		"results/pre_process/process_annotations.log"
+		"results/.logs/pre_process/process_annotations.log"
 	shell:
 		"python workflow/scripts/process_annotations.py "
 		"-i {input.raw_annotations_fp} "

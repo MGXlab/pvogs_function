@@ -2,7 +2,7 @@ rule download_archive:
 	output:
 		tar_gz = "pvogs_function.data.tar.gz"
 	log:
-		"results/logs/get_data/download_archive.log"
+		"results/.logs/get_data/download_archive.log"
 	conda:
 		"envs/zenodo.yml"
 	params:
@@ -22,7 +22,7 @@ rule extract_data:
 		taxonomy_db = "data/taxonomy_db/taxa.sqlite",
 		taxonomy_pkl = "data/taxonomy_db/taxa.sqlite.traverse.pkl"
 	log:
-		"results/logs/get_data/extract_data.log"
+		"results/.logs/get_data/extract_data.log"
 	shell:
 		"tar -xzvf {input.tar_gz} &>{log}"
 
