@@ -2,7 +2,7 @@ channels:
   - bioconda
   - conda-forge
 dependencies:
-  - snakemake==5.24.0
+  - snakemake==5.24.1
   - mamba==0.5.1
   # Required on my machine 
   # to produce the zenodo workflow archive
