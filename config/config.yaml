@@ -47,12 +47,15 @@ comparem_aai:
 # hmmsearch : search pvogs against each dataset
 hmmsearch:
   # Defaults to 8
-  threads: 6
+  threads: 8
 
 ## Snakefile
 # random_forest: used in sklearn.RandomizedSearchCV in the notebook
 random_forest:
   # Defaults to 16
-  threads: 14
+  threads: 30
 
+# predict: used for final predictions
+predict:
+  threads: 30
 
