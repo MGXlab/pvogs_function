@@ -5,7 +5,7 @@
 
 ```
 # Clone this repo
-$ git clone https://git.science.uu.nl/n.pappas/pvogs_function.git
+$ git clone https://git.science.uu.nl/papanikos/pvogs_function.git
 
 # Get in there
 $ cd pvogs_function
