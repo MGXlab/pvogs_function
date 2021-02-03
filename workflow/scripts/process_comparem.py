@@ -39,16 +39,6 @@ def process_comparem_output(aai_out, matrix_out):
     df.to_csv(matrix_out, sep='\t', header=True)
     return True
 
-#    # Convert df to numpy array
-#    mat = df.to_numpy()
-#    # Calculate mean aai for all comparisons
-#    aai = mat.mean()
-#    # Calculate non zero mean
-#    nonzeros = np.count_nonzero(mat)
-#    nonzero_mean_aai = mat.sum() / nonzeros
-#
-#    return aai, nonzero_mean_aai
-
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -56,13 +46,3 @@ if __name__ == "__main__":
     square_matrix_fp = Path(args.output_tsv)
     process_comparem_output(input_fp, square_matrix_fp)
 
-#    if args.write_result:
-#        # I assume the aai_summary.tsv is in /path/to/INTERACTION/aai_out/aai/aai_summary.tsv
-#        interaction = input_dir.parent.parent.name
-#        result_file = Path.joinpath(input_dir, 'aai_means.tsv')
-#        with open(result_file, 'w') as fout:
-#            fout.write('interaction\tmean_aai\tnonzero_mean_aai\n')
-#            fout.write(f'{interaction}\t{aai}\t{nonzero_mean_aai}\n')
-#    else:
-#        print(f'Mean aai : {aai}')
-#        print(f'Non-zero mean aai: {nonzero_mean_aai}')
