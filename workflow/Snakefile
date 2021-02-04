@@ -45,7 +45,8 @@ rule all:
          "results/RF/best_model_id.txt",
          "results/predictions.tsv",
          "results/final_training_set.tsv",
-         "results/predictions_annotations_features.tsv"
+         "results/predictions_annotations_features.tsv",
+         "results/figures/fig_S4.svg"
 
 
 
@@ -124,4 +125,17 @@ rule join_annotations_predictions:
         "-a {input.annotations_tsv} "
         "-o {output.final_table_tsv} "
         "&>{log}"
+
+rule annotation_stats:
+    input:
+        annotations_tsv = rules.parse_annotations.output.processed_annotations_fp,
+        final_table_tsv = rules.join_annotations_predictions.output.final_table_tsv
+    output:
+        "results/figures/fig_S4.svg"
+    log:
+        "results/annotation_stats.py.ipynb"
+    conda:
+        "envs/pvogs_jupy.yml"
+    notebook:
+        "notebooks/annotation_stats.py.ipynb"
 
