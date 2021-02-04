@@ -32,7 +32,7 @@ rule all:
         "results/annotations.tsv",
 
          # Getting to pvogs from proteins and calcualating features
-         # Produced by pre_process.smk
+         # Produced by construct_datasets.smk
          expand(["results/interaction_datasets/{dataset}/{dataset}.interactions.tsv",
                 "results/interaction_datasets/{dataset}/{dataset}.proteins.faa",
                 "results/interaction_datasets/{dataset}/{dataset}.pvogs_interactions.tsv",
@@ -61,13 +61,13 @@ checkpoint random_forest:
         # This only contains the name as a string...
         best_model_id = "results/RF/best_model_id.txt"
     log:
-        "results/.logs/processed_notebook.py.ipynb"
+        "results/analysis.py.ipynb"
     conda:
         "envs/pvogs_jupy.yml"
     threads:
         config['random_forest'].get('threads', 16)
     notebook:
-        "notebooks/data_processing.py.ipynb"
+        "notebooks/analysis.py.ipynb"
 
 
 def get_best_model_id(wildcards):
