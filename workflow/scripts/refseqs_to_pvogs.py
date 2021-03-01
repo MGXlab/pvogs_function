@@ -184,8 +184,8 @@ def main():
                                 protein_pvog_map[intA]['bitscore'],
                                 intB, 
                                 protein_pvog_map[intB]['pvog'],
-                                protein_pvog_map[intA]['evalue'],
-                                protein_pvog_map[intA]['bitscore'],
+                                protein_pvog_map[intB]['evalue'],
+                                protein_pvog_map[intB]['bitscore'],
                                 )
                             )
                     counter += 1
