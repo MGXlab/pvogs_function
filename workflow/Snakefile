@@ -138,4 +138,3 @@ rule annotation_stats:
         "envs/pvogs_jupy.yml"
     notebook:
         "notebooks/annotation_stats.py.ipynb"
-
