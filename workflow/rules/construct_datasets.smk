@@ -191,7 +191,7 @@ rule hmmsearch:
         "-o {output.hmm_out_txt} "
         "--tblout {output.hmm_tblout_tsv} "
         "{input.all_pvogs_profiles} "
-        "{input.proteins_fasta}"
+        "{input.proteins_fasta} 2>{log}"
 
 rule refseqs_to_pvogs:
     input:
@@ -226,5 +226,5 @@ rule create_features_tables:
         "python workflow/scripts/subset_scores.py "
         "-s {input.filtered_master_tsv} "
         "-i {input.interactions_tsv} "
-        "-o {output.features_tsv}"
+        "-o {output.features_tsv} &>{log}"
 
