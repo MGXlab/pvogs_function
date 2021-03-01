@@ -162,6 +162,8 @@ def main():
 
     hmm_results = parse_hmm_table(args.hmmer_tblout)
     print("Proteins with hmmer hits: {}".format(len(list(hmm_results.keys()))))
+    
+    protein_pvog_map = translate_proteins_to_pvogs(hmm_results)
 
     no_results = []
     counter = 0
