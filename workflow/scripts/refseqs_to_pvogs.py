@@ -15,24 +15,29 @@ def parse_args():
                               dest='int_file',
                               type=lambda p: Path(p).resolve(strict=True),
                               required=True,
-                              help="A 2-column tsv file containing interaction data, with refseq ids at"
+                              help="A 2-column tsv file containing "
+                              " interaction data between refseq identifiers" 
                               )
     requiredArgs.add_argument('-f', '--input-fasta',
                               dest='fasta_in',
                               type=lambda p: Path(p).resolve(strict=True),
                               required=True,
-                              help="A fasta file with protein sequences retrieved from uniprot")
+                              help="A fasta file with protein sequences "
+                              "retrieved from uniprot"
+                              )
     requiredArgs.add_argument('-hmm', '--input-hmm',
                               dest='hmmer_tblout',
                               type=lambda p: Path(p).resolve(strict=True),
                               required=True,
-                              help="The tblout file from hmmsearching the proteins in <input_fasta> "
-                                   "against all pvogs")
+                              help="The tblout file from hmmsearching the "
+                              "proteins in <input_fasta> against all pvogs"
+                              )
     requiredArgs.add_argument('-o', '--output-file',
                               dest='outfile',
                               required=True,
                               type=lambda p: Path(p).resolve(),
-                              help="File path to write the results in")
+                              help="File path to write the results in"
+                              )
 
     parser._action_groups.append(optionalArgs)
 
@@ -86,14 +91,41 @@ def parse_hmm_table(hmm_table):
                 prot_acc = hit.id
                 target = remapper.get(prot_acc, prot_acc)
                 if target not in hmm_results:
-                    hmm_results[target] = [(record.id, hit.evalue, hit.bitscore)]
+                    hmm_results[target] = [
+                      (record.id, hit.evalue, hit.bitscore)
+                    ]
                 else:
-                    hmm_results[target].append((record.id, hit.evalue, hit.bitscore))
+                    hmm_results[target].append(
+                      (record.id, hit.evalue, hit.bitscore)
+                    )
     return hmm_results
 
 
 def translate_proteins_to_pvogs(hmm_results_dic):
+    '''
+    Translate refseq accessions to pvogs, based on the best scoring hit
+    
+    Arguments:
+      hmm_results_dic: dict: A dictionary that holds all hmm results per
+        protein. Of the form
+          { protein_id : [
+              (pvog1, evalue, bitscore),
+              (pvog2, evalue, bitscore), 
+              ...
+            ],
+            ...
+          }
 
+    Return:
+      protein_to_pvog: dict: A dictionary of the form
+        { protein_id : {'pvog' : pvog_id,
+                        'evalue': evalue,
+                        'bitscore' : bitscore
+                       },
+            ...
+        }
+
+    '''
     protein_to_pvog = {}
     for p in hmm_results_dic:
         results = hmm_results_dic[p]
@@ -105,8 +137,14 @@ def translate_proteins_to_pvogs(hmm_results_dic):
             best_index = scores.index(max(scores))
             best_result = results[best_index]
 
-        protein_to_pvog[p] = best_result[0]
+        pvog_id, evalue, score = best_result[0], best_result[1], best_result[2]
 
+        protein_to_pvog[p] = {
+            'pvog': pvog_id,
+            'bitscore' : score,
+            'evalue' : evalue,
+            }
+    
     return protein_to_pvog
 
 
@@ -126,7 +164,11 @@ def main():
     print("Proteins with hmmer hits: {}".format(len(list(hmm_results.keys()))))
 
     protein_pvog_map = translate_proteins_to_pvogs(hmm_results)
-
+    for p in protein_pvog_map:
+        print(p, protein_pvog_map[p]['pvog'], 
+                protein_pvog_map[p]['bitscore'],
+                protein_pvog_map[p]['evalue']
+            )
     no_results = []
     counter = 0
     with open(args.outfile, 'w') as fout:
@@ -134,8 +176,18 @@ def main():
             intA, intB = inter[0], inter[1]
             if intA in protein_pvog_map:
                 if intB in protein_pvog_map:
-                    fout.write("{}\t{}\t{}\t{}\n".format(intA, protein_pvog_map[intA],
-                                                         intB, protein_pvog_map[intB]))
+                    fout.write(
+                            "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n".format(
+                                intA, 
+                                protein_pvog_map[intA]['pvog'],
+                                protein_pvog_map[intA]['evalue'],
+                                protein_pvog_map[intA]['bitscore'],
+                                intB, 
+                                protein_pvog_map[intB]['pvog'],
+                                protein_pvog_map[intA]['evalue'],
+                                protein_pvog_map[intA]['bitscore'],
+                                )
+                            )
                     counter += 1
                 else:
                     no_results.append(intB)
