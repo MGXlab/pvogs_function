@@ -13,7 +13,7 @@ rule download_archive:
 
 rule extract_data:
     input:
-        tar_gz = rules.download_archive.output.tar_gz
+        tar_gz = ancient(rules.download_archive.output.tar_gz)
     output:
         genomes_fasta = "data/genomes/phages_refseq.fasta",
         intact_txt= "data/interactions/intact.txt",
