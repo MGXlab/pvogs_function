@@ -18,12 +18,12 @@ rule all:
     input:
         # Raw data required
         # Produced by get_data.smk
-        "data/genomes/phages_refseq.fasta",
-        "data/interactions/intact.txt",
-        "data/pvogs/all.hmm",
-        "data/pvogs/VOGProteinTable.txt",
-        "data/taxonomy_db/taxa.sqlite",
-        "data/taxonomy_db/taxa.sqlite.traverse.pkl",
+        ancient("data/genomes/phages_refseq.fasta"),
+        ancient("data/interactions/intact.txt"),
+        ancient("data/pvogs/all.hmm"),
+        ancient("data/pvogs/VOGProteinTable.txt"),
+        ancient("data/taxonomy_db/taxa.sqlite"),
+        ancient("data/taxonomy_db/taxa.sqlite.traverse.pkl"),
 
         # Pre-processing for calculating matrices
         # Produced by pre_process.smk
