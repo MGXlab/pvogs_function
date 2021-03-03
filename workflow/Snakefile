@@ -46,7 +46,7 @@ rule all:
          "results/predictions.tsv",
          "results/final_training_set.tsv",
          "results/predictions_annotations_features.tsv",
-         "results/figures/fig_S4.svg"
+         "results/figures/fig_6.pdf"
 
 
 
@@ -58,9 +58,14 @@ checkpoint random_forest:
             ),
         filtered_master_tsv = rules.filter_scores_table.output.filtered_master_tsv
     output:
+        multiext("results/RF/figures/fig_1", ".pdf", ".svg", ".eps", ".png"),
+        multiext("results/RF/figures/fig_2", ".pdf", ".svg", ".eps", ".png"),
+        multiext("results/RF/figures/fig_3", ".pdf", ".svg", ".eps", ".png"),
+        multiext("results/RF/figures/fig_4", ".pdf", ".svg", ".eps", ".png"),
+        multiext("results/RF/figures/fig_5", ".pdf", ".svg", ".eps", ".png"),
         best_model = "results/RF/best_model.pkl",
         # This only contains the name as a string...
-        best_model_id = "results/RF/best_model_id.txt"
+        best_model_id = "results/RF/best_model_id.txt",
     log:
         "results/analysis.py.ipynb"
     conda:
@@ -76,7 +81,8 @@ def get_best_model_id(wildcards):
     Helper function to get the id of the dataset that gave the
     best results from the notebook search.
     """
-    checkpoint_output = checkpoints.random_forest.get(**wildcards).output[1]
+    # Grab the last output file from the random_forest output
+    checkpoint_output = checkpoints.random_forest.get(**wildcards).output[-1]
     with open(checkpoint_output, 'r') as fin:
         best_model_id = fin.read().strip()
     return best_model_id
@@ -131,7 +137,7 @@ rule annotation_stats:
         annotations_tsv = rules.parse_annotations.output.processed_annotations_fp,
         final_table_tsv = rules.join_annotations_predictions.output.final_table_tsv
     output:
-        "results/figures/fig_S4.svg"
+        multiext("results/figures/fig_6", ".pdf", ".svg", ".eps", ".png")
     log:
         "results/annotation_stats.py.ipynb"
     conda:
