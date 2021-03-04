@@ -31,8 +31,7 @@ $ conda activate pvogs
 The main purpose of this repository is to host the code necessary for full 
 reproducibility.
 
-* Raw data required are hosted on 
-[zenodo sandbox](https://sandbox.zenodo.org/record/4576599). 
+* Raw data required are [hosted on zenodo](https://zenodo.org/record/4576599). 
 These are automatically downloaded when executing the workflow, 
 so no need to get them.
 Alterantively, you can download the archive from zenodo and unpack it in a 
@@ -96,30 +95,27 @@ This workflow was built and tested locally. No cluster execution was tested,
 although it should be feasible to scale it with
 [the appropriate profile](https://snakemake.readthedocs.io/en/stable/executing/cli.html#profiles). 
 
-### **Option 1. This repo**
-
 All commands assume you have `cd`ed in the root directory of this repo and you
 are using a conda environment created with the provided `environment.yml`. Here
 it is named `pvogs`, and the prefix `(pvogs)` in front of the prompt (`$`) 
 shows it is activated.
 
-- Dry run
-
-Always a good idea before launching the whole worfklow
+1. **Dry run** - _Always a good idea before launching the whole worfklow_
 
 ```
 (pvogs)$ snakemake --use-conda -j 16 -np
 ```
 
-If the dry run completed with no errors you can execute the worfklow by 
-removing the `-n` flag. 
+2. If the dry run completed with no errors,
+
+* You can execute the workflow by removing the `-n` flag. 
 * Adjust the number of parallel jobs (`-j`) according to your setup
 * Remove the `-p` flag if you don't want the commands to be printed.
 
 ```
 (pvogs)$ snakemake --use-conda -j16 -p
 ```
-- Speed up environment creation with mamba
+2a. Speed up environment creation with mamba
 
 If `mamba` is available in your snakemake environment, or if you created a new
 environment with the `environment.yml` provided here:
