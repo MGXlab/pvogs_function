@@ -176,7 +176,7 @@ rule make_negatives:
 rule hmmsearch:
     input:
         proteins_fasta = "results/interaction_datasets/{dataset}/{dataset}.proteins.faa",
-        all_pvogs_profiles = "data/pvogs/all.hmm"
+        all_pvogs_profiles = ancient("data/pvogs/all.hmm")
     output:
         hmm_out_txt = "results/interaction_datasets/06_map_proteins_to_pvogs/{dataset}/{dataset}.hmmout.txt",
         hmm_tblout_tsv = "results/interaction_datasets/06_map_proteins_to_pvogs/{dataset}/{dataset}.hmmtblout.tsv" 
