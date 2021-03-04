@@ -14,16 +14,18 @@ Pre-print: TBD
 # Clone this repo
 $ git clone https://git.science.uu.nl/papanikos/pvogs_function.git
 
-# Get in there
+# Get in here
 $ cd pvogs_function
 
 # Create the environment with conda
 $ conda env create -n pvogs --file=environment.yml
 $ conda activate pvogs
 
-
 # Dry run 
-(pvogs)$ snakemake --use-conda -n -j 16
+(pvogs)$ snakemake --use-conda -j 16 -np
+
+# If dry run finished successfully
+(pvogs)$ snakemake --use-conda -j 16 --conda-frontend mamba
 ```
 
 ## Description
