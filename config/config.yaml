@@ -6,8 +6,8 @@ negatives: 10
 # This should be moved to the stable zenodo doi
 # and remove use_sandbox when publishing
 zenodo:
-  doi: 666718
-  use_sandbox: True
+  doi: 4576599
+  use_sandbox: false
 
 # Core usage for heavy jobs
 # These are defined per rule
