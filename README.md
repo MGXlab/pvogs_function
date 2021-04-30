@@ -12,7 +12,7 @@ Pre-print: TBD
 
 ```
 # Clone this repo
-$ git clone https://git.science.uu.nl/papanikos/pvogs_function.git
+$ git clone https://github.com/MGXlab/pvogs_function.git
 
 # Get in here
 $ cd pvogs_function
