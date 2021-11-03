@@ -4,7 +4,7 @@ A proof-of-concept, automated and reproducible pipeline for predicting
 functional associations between
 [pVOGs](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5210652/).
 
-Pre-print: TBD
+Publication: [BMC Bioinformatics 22, 438 (2021)](https://doi.org/10.1186/s12859-021-04343-w)
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥5.14.0-brightgreen.svg?style=flat)](https://snakemake.readthedocs.io)
 
